@@ -2,50 +2,64 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Lecture</title>
+<title>Épopée</title>
 
 <style>
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
+    padding: 40px;
 }
 
-.header {
-    background: #111;
-    padding: 15px;
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
 }
 
-.header a {
-    color: white;
+ul {
+    max-width: 700px;
+    margin: auto;
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 8px 0;
+}
+
+a {
     text-decoration: none;
+    color: #1a73e8;
     font-size: 16px;
 }
 
-iframe {
-    width: 100%;
-    height: 95vh;
-    border: none;
+a:hover {
+    text-decoration: underline;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-    <a href="index.html">⬅ Retour à l'accueil</a>
-</div>
+<h1>Épopée</h1>
 
-<iframe id="viewer"></iframe>
+<ul>
 
-<script>
-const params = new URLSearchParams(window.location.search);
-const file = params.get("file");
+<li><a href="lecture.html?file=00_epopee.pdf">Épopée</a></li>
+<li><a href="lecture.html?file=01_ma_chance.pdf">Ma chance</a></li>
+<li><a href="lecture.html?file=02_vers_de_nouvelles_mers.pdf">Vers de nouvelles mers</a></li>
+<li><a href="lecture.html?file=03_sanctus_ianus.pdf">Sanctus ianus</a></li>
+<li><a href="lecture.html?file=04_le_signe_du_feu.pdf">Le signe du feu</a></li>
+<li><a href="lecture.html?file=05_monde.pdf">Monde</a></li>
+<li><a href="lecture.html?file=06_chaos.pdf">Chaos</a></li>
+<li><a href="lecture.html?file=07_rien.pdf">Rien</a></li>
+<li><a href="lecture.html?file=08_ombre.pdf">Ombre</a></li>
+<li><a href="lecture.html?file=09_mystere.pdf">Mystère</a></li>
+<li><a href="lecture.html?file=10_dieu.pdf">Dieu</a></li>
 
-if(file){
-    document.getElementById("viewer").src = file;
-}
-</script>
+<!-- Continue avec le même modèle si besoin -->
+
+</ul>
 
 </body>
 </html>
