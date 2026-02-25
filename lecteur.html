@@ -9,94 +9,56 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: linear-gradient(to bottom, #cfefff, #eaf9ff);
-  font-family: Georgia, serif;
+  background: #f4f1ea;
   overflow: hidden;
+  font-family: Georgia, serif;
 }
 
-/* Navigation */
-.nav {
+/* Bouton retour discret */
+#back {
   position: fixed;
   top: 20px;
+  left: 25px;
+  text-decoration: none;
   font-size: 14px;
   letter-spacing: 1px;
   color: rgba(0,0,0,0.6);
-  text-decoration: none;
+  transition: opacity 0.3s ease;
+  z-index: 20;
 }
 
-#back { left: 30px; }
-#prev { right: 120px; }
-#next { right: 30px; }
-
-.nav:hover {
+#back:hover {
   opacity: 0.5;
 }
 
-/* Zone PDF */
-#pdf-container {
+/* Le lecteur prend toute la page */
+#viewer {
   position: absolute;
-  top: 60px;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  overflow: auto;
-  display: flex;
-  justify-content: center;
-}
-
-canvas {
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  inset: 0;
+  border: none;
 }
 </style>
 </head>
 <body>
 
-<a id="back" class="nav" href="index.html">← retour</a>
-<a id="prev" class="nav" href="#">← précédent</a>
-<a id="next" class="nav" href="#">suivant →</a>
+<a id="back" href="index.html">← retour</a>
 
-<div id="pdf-container">
-  <canvas id="pdf-render"></canvas>
-</div>
+<iframe id="viewer"></iframe>
 
-<script src="pdfjs/build/pdf.js"></script>
 <script>
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs/build/pdf.worker.js';
-
-const urlParams = new URLSearchParams(window.location.search);
-const pdfFile = urlParams.get('pdf');
-const container = document.getElementById('pdf-container');
+const params = new URLSearchParams(window.location.search);
+const pdfFile = params.get("pdf");
 
 if (pdfFile && pdfFile.endsWith(".pdf")) {
 
-  pdfjsLib.getDocument(pdfFile).promise.then(function(pdf) {
+  const fullURL =
+    window.location.origin +
+    window.location.pathname.replace("lecteur.html", "") +
+    pdfFile;
 
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-
-      pdf.getPage(pageNum).then(function(page) {
-
-        const viewport = page.getViewport({ scale: 1.3 });
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-
-        container.appendChild(canvas);
-
-        page.render({
-          canvasContext: context,
-          viewport: viewport
-        });
-
-      });
-    }
-
-  }).catch(function(error){
-    console.error("Erreur chargement PDF :", error);
-  });
-
+  document.getElementById("viewer").src =
+    "pdfjs/web/viewer.html?file=" +
+    encodeURIComponent(fullURL);
 }
 </script>
 
