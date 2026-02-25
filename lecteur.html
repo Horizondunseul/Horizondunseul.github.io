@@ -62,76 +62,42 @@ canvas {
 <script src="pdfjs/build/pdf.js"></script>
 <script>
 
-const urlParams = new URLSearchParams(window.location.search);
-const pdfFile = urlParams.get('pdf');
-
-const pdfjsLib = window['pdfjs-dist/build/pdf'];
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs/build/pdf.worker.js';
 
-let pdfDoc = null;
-let pageNum = 1;
-const canvas = document.getElementById('pdf-render');
-const ctx = canvas.getContext('2d');
+const urlParams = new URLSearchParams(window.location.search);
+const pdfFile = urlParams.get('pdf');
+const container = document.getElementById('pdf-container');
 
-function renderPage(num) {
-  pdfDoc.getPage(num).then(function(page) {
-    const viewport = page.getViewport({ scale: 1.5 });
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
+if (pdfFile && pdfFile.endsWith(".pdf")) {
 
-    const renderContext = {
-      canvasContext: ctx,
-      viewport: viewport
-    };
-    page.render(renderContext);
+  pdfjsLib.getDocument(pdfFile).promise.then(function(pdf) {
+
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+
+      pdf.getPage(pageNum).then(function(page) {
+
+        const viewport = page.getViewport({ scale: 1.3 });
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        container.appendChild(canvas);
+
+        page.render({
+          canvasContext: context,
+          viewport: viewport
+        });
+
+      });
+    }
+
+  }).catch(function(error){
+    console.error("Erreur chargement PDF :", error);
   });
+
 }
-
-if (pdfFile) {
-  pdfjsLib.getDocument(pdfFile).promise.then(function(pdfDoc_) {
-    pdfDoc = pdfDoc_;
-    renderPage(pageNum);
-  });
-}
-
-/* Navigation pages */
-document.addEventListener('keydown', function(e) {
-  if (e.key === "ArrowRight" && pageNum < pdfDoc.numPages) {
-    pageNum++;
-    renderPage(pageNum);
-  }
-  if (e.key === "ArrowLeft" && pageNum > 1) {
-    pageNum--;
-    renderPage(pageNum);
-  }
-});
-
-/* Navigation chapitres */
-const chapters = [
-  "01_ma_chance.pdf",
-  "02_vers_de_nouvelles_mers.pdf",
-  "03_sanctus_ianus.pdf",
-  "04_le_signe_du_feu.pdf",
-  "05_monde.pdf"
-  // 👉 continue la liste ici
-];
-
-const currentIndex = chapters.indexOf(pdfFile);
-
-if (currentIndex > 0) {
-  document.getElementById("prev").href =
-    "lecteur.html?pdf=" + chapters[currentIndex - 1];
-} else {
-  document.getElementById("prev").style.display = "none";
-}
-
-if (currentIndex < chapters.length - 1) {
-  document.getElementById("next").href =
-    "lecteur.html?pdf=" + chapters[currentIndex + 1];
-} else {
-  document.getElementById("next").style.display = "none";
-}
-
 </script>
 
 </body>
