@@ -47,8 +47,15 @@ const params = new URLSearchParams(window.location.search);
 const pdfFile = params.get("pdf");
 
 if (pdfFile && pdfFile.endsWith(".pdf")) {
+
+  const fullURL =
+    window.location.origin +
+    window.location.pathname.replace("lecteur.html", "") +
+    pdfFile;
+
   document.getElementById("viewer").src =
-    "https://mozilla.github.io/pdf.js/web/viewer.html?file=" + encodeURIComponent(pdfFile);
+    "https://mozilla.github.io/pdf.js/web/viewer.html?file=" +
+    encodeURIComponent(fullURL);
 }
 </script>
 
