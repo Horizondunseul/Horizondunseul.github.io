@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Lecture</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+}
+
+.topbar {
+  padding: 15px 20px;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.back {
+  text-decoration: none;
+  font-size: 18px;
+  color: #1a73e8;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+.pdf-container {
+  width: 100%;
+  height: calc(100vh - 60px);
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back" href="index.html">← Retour</a>
+</div>
+
+<div class="pdf-container">
+  <iframe id="pdfViewer"></iframe>
+</div>
+
+<script>
+// Récupère le paramètre ?pdf=
+const params = new URLSearchParams(window.location.search);
+const pdfFile = params.get("pdf");
+
+// Sécurité minimale : empêche l’injection de chemin externe
+if (pdfFile && pdfFile.endsWith(".pdf")) {
+  document.getElementById("pdfViewer").src = pdfFile;
+} else {
+  document.body.innerHTML = "<p style='padding:20px;'>Fichier invalide.</p>";
+}
+</script>
+
+</body>
+</html>
