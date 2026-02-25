@@ -9,58 +9,129 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: #f4f1ea; /* ton parchemin doux */
-  overflow: hidden;
+  background: linear-gradient(to bottom, #cfefff, #eaf9ff);
   font-family: Georgia, serif;
+  overflow: hidden;
 }
 
-/* Bouton retour discret */
-#back {
+/* Navigation */
+.nav {
   position: fixed;
   top: 20px;
-  left: 25px;
-  text-decoration: none;
   font-size: 14px;
   letter-spacing: 1px;
   color: rgba(0,0,0,0.6);
-  transition: opacity 0.3s ease;
-  z-index: 20;
+  text-decoration: none;
 }
 
-#back:hover {
+#back { left: 30px; }
+#prev { right: 120px; }
+#next { right: 30px; }
+
+.nav:hover {
   opacity: 0.5;
 }
 
-/* Le lecteur prend toute la page */
-#viewer {
+/* Zone PDF */
+#pdf-container {
   position: absolute;
-  inset: 0;
-  border: none;
+  top: 60px;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+}
+
+canvas {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 </style>
 </head>
 <body>
 
-<a id="back" href="index.html">← retour</a>
+<a id="back" class="nav" href="index.html">← retour</a>
+<a id="prev" class="nav" href="#">← précédent</a>
+<a id="next" class="nav" href="#">suivant →</a>
 
-<iframe id="viewer"></iframe>
+<div id="pdf-container">
+  <canvas id="pdf-render"></canvas>
+</div>
 
+<script src="pdfjs/build/pdf.js"></script>
 <script>
-const params = new URLSearchParams(window.location.search);
-const pdfFile = params.get("pdf");
 
-if (pdfFile && pdfFile.endsWith(".pdf")) {
+const urlParams = new URLSearchParams(window.location.search);
+const pdfFile = urlParams.get('pdf');
 
-  const fullURL =
-    window.location.origin +
-    window.location.pathname.replace("lecteur.html", "") +
-    pdfFile;
+const pdfjsLib = window['pdfjs-dist/build/pdf'];
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs/build/pdf.worker.js';
 
-  document.getElementById("viewer").src =
-    "pdfjs/web/viewer.html?file=" +
-    encodeURIComponent(fullURL) +
-    "#toolbar=0&navpanes=0&scrollbar=0";
+let pdfDoc = null;
+let pageNum = 1;
+const canvas = document.getElementById('pdf-render');
+const ctx = canvas.getContext('2d');
+
+function renderPage(num) {
+  pdfDoc.getPage(num).then(function(page) {
+    const viewport = page.getViewport({ scale: 1.5 });
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+
+    const renderContext = {
+      canvasContext: ctx,
+      viewport: viewport
+    };
+    page.render(renderContext);
+  });
 }
+
+if (pdfFile) {
+  pdfjsLib.getDocument(pdfFile).promise.then(function(pdfDoc_) {
+    pdfDoc = pdfDoc_;
+    renderPage(pageNum);
+  });
+}
+
+/* Navigation pages */
+document.addEventListener('keydown', function(e) {
+  if (e.key === "ArrowRight" && pageNum < pdfDoc.numPages) {
+    pageNum++;
+    renderPage(pageNum);
+  }
+  if (e.key === "ArrowLeft" && pageNum > 1) {
+    pageNum--;
+    renderPage(pageNum);
+  }
+});
+
+/* Navigation chapitres */
+const chapters = [
+  "01_ma_chance.pdf",
+  "02_vers_de_nouvelles_mers.pdf",
+  "03_sanctus_ianus.pdf",
+  "04_le_signe_du_feu.pdf",
+  "05_monde.pdf"
+  // 👉 continue la liste ici
+];
+
+const currentIndex = chapters.indexOf(pdfFile);
+
+if (currentIndex > 0) {
+  document.getElementById("prev").href =
+    "lecteur.html?pdf=" + chapters[currentIndex - 1];
+} else {
+  document.getElementById("prev").style.display = "none";
+}
+
+if (currentIndex < chapters.length - 1) {
+  document.getElementById("next").href =
+    "lecteur.html?pdf=" + chapters[currentIndex + 1];
+} else {
+  document.getElementById("next").style.display = "none";
+}
+
 </script>
 
 </body>
