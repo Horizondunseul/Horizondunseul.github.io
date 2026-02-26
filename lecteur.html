@@ -27,12 +27,6 @@ html, body {
   z-index: 10;
 }
 
-#topbar a {
-  text-decoration: none;
-  font-size: 16px;
-  color: #1a73e8;
-}
-
 #viewer {
   position: absolute;
   top: 60px;
@@ -57,13 +51,11 @@ const pdfFile = params.get("pdf");
 
 if (pdfFile && pdfFile.endsWith(".pdf")) {
 
-  // construit le bon chemin même sur GitHub Pages
-  const basePath = window.location.pathname.replace("lecteur.html", "");
-  const fullURL = window.location.origin + basePath + pdfFile;
+  // chemin ABSOLU compatible GitHub Pages
+  const fullURL = window.location.origin + "/pdf/" + pdfFile;
 
   document.getElementById("viewer").src =
-    "./pdfjs/web/viewer.html?file=" +
-    encodeURIComponent(fullURL);
+    "pdfjs/web/viewer.html?file=" + encodeURIComponent(fullURL);
 
 } else {
   document.body.innerHTML = "<p style='padding:20px;'>Fichier invalide.</p>";
