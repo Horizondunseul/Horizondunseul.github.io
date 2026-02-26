@@ -8,9 +8,8 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  overflow: hidden;
   font-family: Arial, sans-serif;
+  background: #f5f5f5;
 }
 
 #topbar {
@@ -27,13 +26,16 @@ html, body {
   z-index: 10;
 }
 
-#viewer {
-  position: absolute;
-  top: 60px;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - 60px);
-  border: none;
+#content {
+  margin-top: 70px;
+  text-align: center;
+}
+
+#content img {
+  max-width: 95%;
+  height: auto;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 </style>
 </head>
@@ -43,22 +45,21 @@ html, body {
   <a href="index.html">← Retour</a>
 </div>
 
-<iframe id="viewer"></iframe>
+<div id="content"></div>
 
 <script>
 const params = new URLSearchParams(window.location.search);
-const pdfFile = params.get("pdf");
+const imageName = params.get("img");
 
-if (pdfFile && pdfFile.endsWith(".pdf")) {
+if (imageName && imageName.endsWith(".jpg")) {
 
-  // chemin ABSOLU compatible GitHub Pages
-  const fullURL = window.location.origin + "/pdf/" + pdfFile;
-
-  document.getElementById("viewer").src =
-    "pdfjs/web/viewer.html?file=" + encodeURIComponent(fullURL);
+  const img = document.createElement("img");
+  img.src = "images/" + imageName;
+  document.getElementById("content").appendChild(img);
 
 } else {
-  document.body.innerHTML = "<p style='padding:20px;'>Fichier invalide.</p>";
+  document.getElementById("content").innerHTML =
+    "<p>Image invalide.</p>";
 }
 </script>
 
