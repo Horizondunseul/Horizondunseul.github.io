@@ -2,45 +2,79 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Horizon de Tous</title>
+<title>Lecture</title>
+
 <style>
 body {
-  font-family: Arial;
-  padding: 40px;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
 }
 
-a {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 18px;
-  text-decoration: none;
-  color: #1a73e8;
+#topbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  background: white;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+#content {
+  margin-top: 70px;
+  text-align: center;
+}
+
+#content img {
+  max-width: 95%;
+  height: auto;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 </style>
 </head>
 <body>
 
-<h1>Horizon de Tous</h1>
+<div id="topbar">
+  <a href="index.html">← Retour</a>
+</div>
 
-<a href="lecteur.html?chapitre=0_epopee">0 — Épopée</a>
+<div id="content"></div>
 
-<a href="lecteur.html?chapitre=01_ma_chance">01 — Ma Chance</a>
-<a href="lecteur.html?chapitre=02_nom">02 — Chapitre 2</a>
-<a href="lecteur.html?chapitre=03_nom">03 — Chapitre 3</a>
-<a href="lecteur.html?chapitre=04_nom">04 — Chapitre 4</a>
-<a href="lecteur.html?chapitre=05_nom">05 — Chapitre 5</a>
-<a href="lecteur.html?chapitre=06_nom">06 — Chapitre 6</a>
-<a href="lecteur.html?chapitre=07_nom">07 — Chapitre 7</a>
-<a href="lecteur.html?chapitre=08_nom">08 — Chapitre 8</a>
-<a href="lecteur.html?chapitre=09_nom">09 — Chapitre 9</a>
-<a href="lecteur.html?chapitre=10_nom">10 — Chapitre 10</a>
-<a href="lecteur.html?chapitre=11_nom">11 — Chapitre 11</a>
-<a href="lecteur.html?chapitre=12_nom">12 — Chapitre 12</a>
-<a href="lecteur.html?chapitre=13_nom">13 — Chapitre 13</a>
-<a href="lecteur.html?chapitre=14_nom">14 — Chapitre 14</a>
-<a href="lecteur.html?chapitre=15_nom">15 — Chapitre 15</a>
+<script>
+const params = new URLSearchParams(window.location.search);
+const chapitre = params.get("chapitre");
 
-<a href="lecteur.html?chapitre=79_aube">79 — Aube</a>
+if (!chapitre) {
+  document.getElementById("content").innerHTML = "<p>Chapitre invalide.</p>";
+} else {
+
+  let page = 1;
+  const content = document.getElementById("content");
+
+  function chargerPage() {
+    const numero = String(page).padStart(4, "0");
+    const img = new Image();
+    img.src = "images/" + chapitre + "_page-" + numero + ".jpg";
+
+    img.onload = function() {
+      content.appendChild(img);
+      page++;
+      chargerPage();
+    };
+
+    img.onerror = function() {
+      console.log("Fin du chapitre.");
+    };
+  }
+
+  chargerPage();
+}
+</script>
 
 </body>
 </html>
