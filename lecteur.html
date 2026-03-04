@@ -25,7 +25,7 @@ body {
 }
 
 #content {
-  margin-top: 70px;
+  margin-top: 80px;
   text-align: center;
 }
 
@@ -35,6 +35,12 @@ body {
   margin-bottom: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+
+#message {
+  margin: 20px;
+  font-size: 18px;
+  color: #555;
+}
 </style>
 </head>
 <body>
@@ -43,32 +49,46 @@ body {
   <a href="index.html">← Retour</a>
 </div>
 
-<div id="content"></div>
+<div id="content">
+  <p id="message">Chargement...</p>
+</div>
 
 <script>
 const params = new URLSearchParams(window.location.search);
-const chapitre = params.get("chapitre");
+let chapitre = params.get("chapitre");
 
-if (!chapitre) {
-  document.getElementById("content").innerHTML = "<p>Chapitre invalide.</p>";
+const content = document.getElementById("content");
+const message = document.getElementById("message");
+
+// 🔐 Sécurisation du paramètre (lettres, chiffres, _ et - uniquement)
+const regex = /^[a-zA-Z0-9_-]+$/;
+
+if (!chapitre || !regex.test(chapitre)) {
+  message.innerText = "Chapitre invalide.";
 } else {
 
   let page = 1;
-  const content = document.getElementById("content");
 
   function chargerPage() {
     const numero = String(page).padStart(4, "0");
+    const imageUrl = "images/" + chapitre + "_page-" + numero + ".jpg";
+
     const img = new Image();
-    img.src = "images/" + chapitre + "_page-" + numero + ".jpg";
+    img.loading = "lazy"; // 🔥 Lazy loading
+    img.src = imageUrl;
 
     img.onload = function() {
-      content.appendChild(img);
+      content.insertBefore(img, message);
       page++;
       chargerPage();
     };
 
     img.onerror = function() {
-      console.log("Fin du chapitre.");
+      if (page === 1) {
+        message.innerText = "Aucune image trouvée pour ce chapitre.";
+      } else {
+        message.innerText = "Fin du chapitre.";
+      }
     };
   }
 
