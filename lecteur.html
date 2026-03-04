@@ -65,7 +65,7 @@ if (!chapitre) {
     const numero = String(page).padStart(4, "0");
     const img = new Image();
     img.loading = "lazy";
-    img.src = chapitre + "_page-" + numero + ".jpeg";
+    img.src = chapitre + "_page-" + numero + ".jpg";
 
     img.onload = function() {
       content.appendChild(img);
@@ -77,7 +77,6 @@ if (!chapitre) {
       if (page === 1) {
         content.innerHTML = "<p>Aucune image trouvée.</p>";
       }
-      // sinon on arrête = fin du chapitre
     };
   }
 
