@@ -51,36 +51,8 @@ img {
 <div id="content"></div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const chapitre = params.get("chapitre");
-const content = document.getElementById("content");
-
-if (!chapitre) {
-  content.innerHTML = "<p>Chapitre invalide.</p>";
-} else {
-
-  let page = 1;
-
-  function chargerPage() {
-    const numero = String(page).padStart(4, "0");
-    const img = new Image();
-    img.loading = "lazy";
-
-    img.src = window.location.origin + "/" + chapitre + "_page-" + numero + ".jpg";
-
-    img.onload = function() {
-      content.appendChild(img);
-      page++;
-      chargerPage();
-    };
-
-    img.onerror = function() {
-      if (page === 1) {
-        content.innerHTML = "<p>Aucune image trouvée.</p>";
-      }
-    };
-  }
-
-  chargerPage();
-}
+const img = document.createElement("img");
+img.src = "01_ma_chance_page-0001.jpg";
+img.style.maxWidth = "95%";
+document.getElementById("content").appendChild(img);
 </script>
