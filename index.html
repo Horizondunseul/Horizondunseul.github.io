@@ -2,46 +2,54 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Sommaire</title>
+<title>Horizon d’un seul</title>
 <style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    padding-top: 50px;
-    text-align: center;
-  }
-  h1 {
-    margin-bottom: 20px;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    margin: 10px 0;
-  }
-  a {
-    text-decoration: none;
-    font-size: 20px;
-    color: #0066cc;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+h1 {
+  margin-bottom: 40px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  max-width: 900px;
+  margin: auto;
+}
+
+a {
+  display: block;
+  padding: 15px;
+  background: white;
+  text-decoration: none;
+  color: black;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: 0.2s;
+}
+
+a:hover {
+  transform: scale(1.03);
+}
 </style>
 </head>
 <body>
 
-<h1>📚 Sommaire des chapitres</h1>
-<ul>
-  <!-- Exemple : ajoute un lien par chapitre -->
-  <li><a href="lecture.html?chapitre=naruto01">Chapitre 1 — Naruto</a></li>
-  <li><a href="lecture.html?chapitre=onepiece01">Chapitre 1 — One Piece</a></li>
-  <li><a href="lecture.html?chapitre=bleach01">Chapitre 1 — Bleach</a></li>
-</ul>
+<h1>📖 Horizon d’un seul</h1>
 
-<p>Ajoute ici tes propres chapitres en suivant le modèle ci-dessus.</p>
+<div class="grid">
+  <a href="lecture.html?chapitre=01_ma_chance">01 — Ma chance</a>
+  <a href="lecture.html?chapitre=02_vers_de_nouvelles_mers">02 — Vers de nouvelles mers</a>
+  <a href="lecture.html?chapitre=03_sanctus_lanus">03 — Sanctus lanus</a>
+  <a href="lecture.html?chapitre=04_le_signe_du_feu">04 — Le signe du feu</a>
+</div>
 
 </body>
 </html>
