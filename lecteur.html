@@ -66,8 +66,7 @@ if (!chapitre) {
     const img = new Image();
     img.loading = "lazy";
 
-    // CHEMIN CORRIGÉ ICI 👇
-    img.src = "./" + chapitre + "_page-" + numero + ".jpg";
+   img.src = window.location.origin + "/" + chapitre + "_page-" + numero + ".jpg";
 
     img.onload = function() {
       content.appendChild(img);
